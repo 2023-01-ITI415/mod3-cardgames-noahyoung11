@@ -118,4 +118,48 @@ public class Card : MonoBehaviour
         _tGO.name = "back";
         back = _tGO;
     }
+
+    private SpriteRenderer[] spriteRenderers;
+
+    void PopulateSpriteRenderers(){
+        if(spriteRenderers != null) return;
+        spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
+    }
+
+    public void SetSpriteSortingLayer(string layerName){
+        PopulateSpriteRenderers();
+
+        foreach(SpriteRenderer srend in spriteRenderers){
+            srend.sortingLayerName = layerName;
+        }
+    }
+
+    public void SetSortingOrder(int sOrd){
+        PopulateSpriteRenderers();
+
+        foreach(SpriteRenderer srend in spriteRenderers){
+            if(srend.gameObject == this.gameObject){
+                srend.sortingOrder = sOrd;
+            }else if(srend.gameObject.name == "back"){
+                srend.sortingOrder = sOrd + 2;
+            }else{
+                srend.sortingOrder = sOrd + 1;
+            }
+        }
+    }
+
+    virtual public void OnMouseUpAsButton(){
+        print(name);
+    }
+
+    public bool AdjacentTo(Card otherCard, bool wrap = true){
+        if(!faceUp || !otherCard.faceUp) return (false);
+        if(Mathf.Abs(rank - otherCard.rank) == 1) return (true);
+        if(wrap){
+            if(rank == 1 && otherCard.rank == 13) return (true);
+            if(rank == 13 && otherCard.rank == 1) return (true);
+
+        }
+        return (false);
+    }
 }
