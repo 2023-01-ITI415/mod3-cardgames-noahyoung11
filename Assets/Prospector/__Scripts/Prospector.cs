@@ -149,6 +149,32 @@ public class Prospector : MonoBehaviour
         }
     }
 
+    void CheckForGameOver(){
+        if(mine.Count == 0){
+            GameOver(true);
+            return;
+        }
+        if(drawPile.Count > 0) return;
+
+        foreach(CardProspector cp in mine){
+            if(target.AdjacentTo(cp)) return;
+        }
+
+        GameOver(false);
+    }
+
+    void GameOver(bool won){
+        if(won){
+            ScoreManager.TALLY(eScoreEvent.gameWin);
+        }else{
+            ScoreManager.TALLY(eScoreEvent.gameLoss);
+        }
+
+        CardSpritesSO.RESET();
+
+        SceneManager.LoadScene("__Prospector_Scene_0");
+    }
+
     static public void CARD_CLICKED(CardProspector cp){
         switch(cp.state){
         case eCardState.target:
@@ -156,6 +182,7 @@ public class Prospector : MonoBehaviour
         case eCardState.drawpile:
             S.MoveToTarget(S.Draw());
             S.UpdateDrawPile();
+            ScoreManager.TALLY(eScoreEvent.draw);
             break;
         case eCardState.mine:
             bool validMatch = true;
@@ -166,9 +193,11 @@ public class Prospector : MonoBehaviour
                 S.mine.Remove(cp);
                 S.MoveToTarget(cp);
                 S.SetMineFaceUps();
+                ScoreManager.TALLY(eScoreEvent.mine);
             }
             break;
         }
+        S.CheckForGameOver();
     }
 
 }
