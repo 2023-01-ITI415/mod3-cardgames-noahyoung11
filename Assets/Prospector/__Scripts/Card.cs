@@ -159,7 +159,7 @@ public class Card : MonoBehaviour
     }
 
     public bool AdjacentTo(Card otherCard, bool wrap = true){
-        if(!faceUp || !otherCard.faceUp) return (false);
+        //if(!faceUp || !otherCard.faceUp) return (false);
         if(!unlock || !otherCard.unlock) return (false);
         if(Mathf.Abs(rank - otherCard.rank) == 1) return (true);
         if(wrap){
