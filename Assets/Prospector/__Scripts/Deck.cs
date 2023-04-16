@@ -10,6 +10,7 @@ public class Deck : MonoBehaviour
     public GameObject prefabCard;
     public GameObject prefabSprite;
     public bool startFaceUp = true;
+    public bool startUnlock = true;
 
     [Header("Dynamic")]
     public Transform deckAnchor;
@@ -60,7 +61,7 @@ public class Deck : MonoBehaviour
 
         Card card = go.GetComponent<Card>();
 
-        card.Init(suit, rank, startFaceUp);
+        card.Init(suit, rank, startFaceUp, startUnlock);
 
         return card;
     }

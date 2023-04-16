@@ -16,6 +16,7 @@ public class JsonLayoutSlot : ISerializationCallbackReceiver
     public int x;
     public int y;
     public bool faceUp;
+    public bool unlock;
     public string layer;
     public string hiddenByString;
 

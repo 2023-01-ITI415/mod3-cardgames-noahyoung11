@@ -71,6 +71,7 @@ public class Golf : MonoBehaviour
 
         foreach(JsonLayoutSlot slot in jsonLayout.slots){
             cg = Draw();
+            cg.faceUp = slot.faceUp;
             cg.unlock = slot.unlock;
             cg.transform.SetParent(layoutAnchor);
 
@@ -96,6 +97,7 @@ public class Golf : MonoBehaviour
         cg.transform.SetParent(layoutAnchor);
 
         cg.SetLocalPos(new Vector3(jsonLayout.multiplier.x * jsonLayout.discardPile.x, jsonLayout.multiplier.y * jsonLayout.discardPile.y, 0));
+        cg.faceUp = true;
         cg.unlock = true;
 
         cg.SetSpriteSortingLayer(jsonLayout.discardPile.layer);
@@ -128,6 +130,7 @@ public class Golf : MonoBehaviour
             cgPos.z = 0.1f * i;
             cg.SetLocalPos(cgPos);
 
+            cg.faceUp = false;
             cg.unlock = false;
             cg.state = gCardState.drawpile;
             cg.SetSpriteSortingLayer(jsonLayout.drawPile.layer);
@@ -135,14 +138,29 @@ public class Golf : MonoBehaviour
         }
     }
 
-    public void SetMineunlocks(){
+    public void SetMinefaceUps(){
         CardGolf coverCG;
         foreach(CardGolf cg in mine){
-            bool unlock = true;
+            bool faceUp = true;
 
             foreach(int coverID in cg.layoutSlot.hiddenBy){
                 coverCG = mineIDToCardDict[coverID];
                 if(coverCG == null || coverCG.state == gCardState.mine){
+                    faceUp = false;
+                }
+            }
+            cg.faceUp = faceUp;
+        }
+    }
+
+    public void SetMineUnlocks(){
+        CardGolf coverCGG;
+        foreach(CardGolf cg in mine){
+            bool unlock = true;
+
+            foreach(int coverID in cg.layoutSlot.hiddenBy){
+                coverCGG = mineIDToCardDict[coverID];
+                if(coverCGG == null || coverCGG.state == gCardState.mine){
                     unlock = false;
                 }
             }
@@ -194,12 +212,14 @@ public class Golf : MonoBehaviour
         case gCardState.mine:
             bool validMatch = true;
 
+            if(!cg.faceUp) validMatch = false;
             if(!cg.unlock) validMatch = false;
             if(!cg.AdjacentTo(S.target)) validMatch = false;
             if(validMatch){
                 S.mine.Remove(cg);
                 S.MoveToTarget(cg);
-                S.SetMineunlocks();
+                S.SetMinefaceUps();
+                S.SetMineUnlocks();
                 ScoreManager.TALLY(eScoreEvent.mine);
             }
             break;

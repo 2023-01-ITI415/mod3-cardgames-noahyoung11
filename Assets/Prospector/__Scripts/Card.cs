@@ -16,7 +16,7 @@ public class Card : MonoBehaviour
 
     public List<GameObject> pipGOs = new List<GameObject>();
 
-    public void Init(char eSuit, int eRank, bool startFaceUp = true){
+    public void Init(char eSuit, int eRank, bool startFaceUp = true, bool startUnlock = true){
         gameObject.name = name = eSuit.ToString() + eRank;
         suit = eSuit;
         rank = eRank;
@@ -33,6 +33,7 @@ public class Card : MonoBehaviour
         AddFace();
         AddBack();
         faceUp = startFaceUp;
+        unlock = startUnlock;
     }
 
     public virtual void SetLocalPos(Vector3 v){
@@ -109,6 +110,11 @@ public class Card : MonoBehaviour
         set{back.SetActive(!value);}
     }
 
+    public bool unlock {
+        get{return(!back.activeSelf);}
+        set{back.SetActive(!value);}
+    }
+
     private void AddBack(){
         _tGO = Instantiate<GameObject>(Deck.SPRITE_PREFAB, transform);
         _tSRend = _tGO.GetComponent<SpriteRenderer>();
@@ -154,6 +160,7 @@ public class Card : MonoBehaviour
 
     public bool AdjacentTo(Card otherCard, bool wrap = true){
         if(!faceUp || !otherCard.faceUp) return (false);
+        if(!unlock || !otherCard.unlock) return (false);
         if(Mathf.Abs(rank - otherCard.rank) == 1) return (true);
         if(wrap){
             if(rank == 1 && otherCard.rank == 13) return (true);
