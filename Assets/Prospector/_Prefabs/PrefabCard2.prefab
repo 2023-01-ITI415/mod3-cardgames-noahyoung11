@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 5225866677002698257}
   - component: {fileID: 8972227695305491051}
   - component: {fileID: 392392312034745381}
-  - component: {fileID: 9144811859488540894}
+  - component: {fileID: -2709648089140975643}
   m_Layer: 0
-  m_Name: PrefabCard
+  m_Name: PrefabCard2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -112,7 +112,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.56, y: 3.56}
   m_EdgeRadius: 0
---- !u!114 &9144811859488540894
+--- !u!114 &-2709648089140975643
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,7 +121,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3916034157148009984}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5bda171d50be424c8d87f8e504fe689, type: 3}
+  m_Script: {fileID: 11500000, guid: 9a318615f1ce412488e9831b03dbc439, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   suit: 0
