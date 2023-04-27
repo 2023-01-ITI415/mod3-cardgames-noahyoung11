@@ -72,6 +72,7 @@ public class Golf : MonoBehaviour
         foreach(JsonLayoutSlot slot in jsonLayout.slots){
             cg = Draw();
             cg.faceUp = slot.faceUp;
+            cg.unlock = slot.unlock;
             cg.transform.SetParent(layoutAnchor);
 
             int z = int.Parse(slot.layer[slot.layer.Length - 1].ToString());
@@ -142,6 +143,20 @@ public class Golf : MonoBehaviour
         }
     }
 
+    public void SetMineUnlocks(){
+        CardGolf coverCG;
+        foreach(CardGolf cg in mine){
+            bool unlock = true;
+            foreach(int coverID in cg.layoutSlot.hiddenBy){
+                coverCG = mineIDToCardDict[coverID];
+                if(coverCG == null || coverCG.state == gCardState.mine){
+                    unlock = false;
+                }
+            }
+            cg.unlock = unlock;
+        }
+    }
+
     void CheckForGameOver(){
         if(mine.Count == 0){
             GameOver(true);
@@ -192,6 +207,7 @@ public class Golf : MonoBehaviour
                 S.mine.Remove(cg);
                 S.MoveToTarget(cg);
                 S.SetMinefaceUps();
+                S.SetMineUnlocks();
                 ScoreManager.TALLY(eScoreEvent.mine);
             }
             break;
